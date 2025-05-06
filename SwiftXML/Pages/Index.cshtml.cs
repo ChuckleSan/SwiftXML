@@ -11,14 +11,9 @@ using SwiftXML.Services;
 
 namespace SwiftXML.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel(PdfXmlExtractorService pdfXmlExtractorService) : PageModel
     {
-        private readonly PdfXmlExtractorService _pdfXmlExtractorService;
-
-        public IndexModel(PdfXmlExtractorService pdfXmlExtractorService)
-        {
-            _pdfXmlExtractorService = pdfXmlExtractorService;
-        }
+        private readonly PdfXmlExtractorService _pdfXmlExtractorService = pdfXmlExtractorService;
 
         [BindProperty]
         public IFormFile? PdfFile { get; set; }
@@ -116,21 +111,19 @@ namespace SwiftXML.Pages
                 using var memoryStream = new MemoryStream();
                 using (var writer = new PdfWriter(memoryStream))
                 {
-                    using (var pdf = new PdfDocument(writer))
-                    {
-                        // Add content to the PDF
-                        var document = new Document(pdf);
-                        document.Add(new Paragraph("Sample PDF with XML Content")
-                            .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
-                            .SetFontSize(16));
-                        document.Add(new Paragraph("The following XML is included as text in this PDF:"));
-                        document.Add(new Paragraph(xmlContent)
-                            .SetFont(PdfFontFactory.CreateFont(StandardFonts.COURIER))
-                            .SetFontSize(10)
-                            .SetFixedLeading(12));
+                    using var pdf = new PdfDocument(writer);
+                    // Add content to the PDF
+                    var document = new Document(pdf);
+                    document.Add(new Paragraph("Sample PDF with XML Content")
+                        .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
+                        .SetFontSize(16));
+                    document.Add(new Paragraph("The following XML is included as text in this PDF:"));
+                    document.Add(new Paragraph(xmlContent)
+                        .SetFont(PdfFontFactory.CreateFont(StandardFonts.COURIER))
+                        .SetFontSize(10)
+                        .SetFixedLeading(12));
 
-                        document.Close();
-                    }
+                    document.Close();
                 }
 
                 // Return the PDF as a downloadable file
