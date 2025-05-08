@@ -38,7 +38,7 @@ namespace SwiftXML.Services
 
                 // Use regex to find XML-like content
                 //string pattern = @"<\?xml.*?</Invoice>";  Original regex replaced with the line below
-                string pattern = @"<Document xmlns.*?</Document>";
+                string pattern = @"<pacs:Document xmlns.*?</Document>";
                 var matches = Regex.Matches(textContent.ToString(), pattern, RegexOptions.Singleline);
 
                 if (matches.Count > 0)
