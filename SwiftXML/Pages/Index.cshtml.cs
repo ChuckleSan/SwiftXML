@@ -11,9 +11,9 @@ using SwiftXML.Services;
 
 namespace SwiftXML.Pages
 {
-    public class IndexModel(PdfXmlExtractorService pdfXmlExtractorService) : PageModel
+    public class IndexModel(IPdfXmlExtractorService pdfXmlExtractorService) : PageModel
     {
-        private readonly PdfXmlExtractorService _pdfXmlExtractorService = pdfXmlExtractorService;
+        private readonly IPdfXmlExtractorService _pdfXmlExtractorService = pdfXmlExtractorService;
 
         [BindProperty]
         public IFormFile? PdfFile { get; set; }

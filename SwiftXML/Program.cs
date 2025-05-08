@@ -1,14 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
-
-using SwiftXML.Services;
-
 using SwiftXML.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//builder.Services.AddScoped<IPdfXmlExtractorService, PdfXmlExtractorService>();
+builder.Services.AddScoped<IPdfXmlExtractorService, PigXmlExtractorService>();
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<PdfXmlExtractorService>();
 
 var app = builder.Build();
 
