@@ -2,18 +2,17 @@
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas.Parser;
-using iText.Kernel.Pdf.Canvas.Parser.Listener;
+using UglyToad.PdfPig;
 
 namespace SwiftXML.Services
 {
-    public class PdfXmlExtractorService : IPdfXmlExtractorService
+    public class PigXmlExtractorService : IPdfXmlExtractorService
     {
         public async Task<(List<string> XmlContents, string ErrorMessage)> ExtractXmlAsync(IFormFile? pdfFile)
         {
             List<string> xmlContents = new();
-            string errorMessage;
+            string errorMessage = string.Empty;
+
             try
             {
                 // Validate input
@@ -57,14 +56,12 @@ namespace SwiftXML.Services
             await pdfFile.CopyToAsync(stream);
             stream.Position = 0;
 
-            using var pdfDoc = new PdfDocument(new PdfReader(stream));
-            StringBuilder textContent = new();
+            using var pdfDoc = PdfDocument.Open(stream);
+            var textContent = new StringBuilder();
 
-            for (int pageNum = 1; pageNum <= pdfDoc.GetNumberOfPages(); pageNum++)
+            foreach (var page in pdfDoc.GetPages())
             {
-                var page = pdfDoc.GetPage(pageNum);
-                var text = PdfTextExtractor.GetTextFromPage(page, new SimpleTextExtractionStrategy());
-                textContent.Append(text);
+                textContent.Append(page.Text);
             }
 
             return textContent.ToString();
@@ -77,7 +74,7 @@ namespace SwiftXML.Services
                 // Clean non-XML text
                 string cleanedXml = PdfXmlExtractorUtils.CleanNonXmlText(xmlContent);
 
-                // Parse and format XML (existing pretty-printing logic)
+                // Parse and format XML
                 var xmlDoc = XDocument.Parse(cleanedXml);
                 return xmlDoc.ToString();
             }
