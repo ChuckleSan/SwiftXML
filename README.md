@@ -1,4 +1,4 @@
-<img src="https://github.com/ChuckleSan/ECBRates/blob/master/ECBRates/wwwroot/assets/Logo_European_Central_Bank.svg.png" align="right" height="64px" />
+<img src="https://github.com/ChuckleSan/SwiftXML/blob/master/SwiftXML/wwwroot/assets/54721-a4aac1swift-tile.webp" align="right" height="64px" />
 
 # SwiftXML - PDF XML Extractor
 
